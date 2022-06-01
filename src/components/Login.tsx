@@ -1,103 +1,88 @@
-import { ChangeEvent, useState } from "react";
+import React, { useState } from 'react'
 import { useNavigate } from "react-router-dom";
+import { credentials } from '../data/credentials';
 
-const Login = () => {
+function Login() {
     
     const navigate = useNavigate();
-    const credentials = {
-        user: 'thebest',
-        password: 'teacher',
-    }
 
-    const [user, setUser] = useState("");
-    const [password, setPassword] = useState("");
-    const [errorMsg, setErrorMsg] = useState("");
-    const [modalState, setModalState] = useState(Boolean);
+    const [userInfo, setUserInfo] = useState({user: "", password: ""});
+    const [modalState, setModalState] = useState(false);
+    const [error, setError] = useState("");
 
-    function login(){
-        console.log(user);
-        console.log(password);
-        if(emptyFields() || fieldsNotMatch()){
-            setErrorMsg("Please enter valid credentials");
+    const submitHandler = e => {
+        e.preventDefault();
+        if(emptyFields(userInfo) || fieldsNotMatch(userInfo)){
+            setError("Please enter valid credentials");
         } else {
-            if(user !== credentials.user) {
-                setErrorMsg("Please enter valid user");
-            } else if(password !== credentials.password) {
-                setErrorMsg("Please enter valid password");
+            if(userInfo.user !== credentials.user) {
+                setError("Please enter valid user");
+            } else if(userInfo.password !== credentials.password) {
+                setError("Please enter valid password");
             } else {
-                navigate("/dashboard");
+                setUserInfo({
+                    user: userInfo.user,
+                    password: userInfo.password
+                })
+                localStorage.setItem("userInfo", JSON.stringify(userInfo));
+                navigate('../dashboard');
             }
         }
+    }    
+
+    function emptyFields(details): boolean {
+        return details.user === "" && details.password === "";
     }
     
-
-    function onChangeAnyInput() {
-        setErrorMsg("");
+    function fieldsNotMatch(details): boolean {
+        return details.user !== credentials.user && details.password !== credentials.password;
     }
 
-    function onChangeUser(e: ChangeEvent<HTMLInputElement>) {
-        setUser(e.target.value);
-        onChangeAnyInput();
-    }
-
-    function onChangePassword(e: ChangeEvent<HTMLInputElement>) {
-        setPassword(e.target.value);
-        onChangeAnyInput();
-    }
-
-    function emptyFields(): boolean {
-        return user === "" && password === "";
-    }
-
-    function fieldsNotMatch(): boolean {
-        return user !== credentials.user && password !== credentials.password;
-    }
     function hint() {
         modalState ? setModalState(false) : setModalState(true)
     }
-
+    
     return (
         <div className="container">
             <nav className="text-end pt-3">
-                <a href="/" className="link text-uppercase px-3">Home</a>
-                <span className="link text-uppercase px-3 fw-bold">Log In</span>
+                <a href="/" className="link text-uppercase px-3 text-white">Home</a>
+                <span className="link text-uppercase px-3 fw-bold text-white">Log In</span>
             </nav>
             <div className="d-flex justify-content-evenly align-items-center all-page">
-                <div className="loginPanel">
+                <form onSubmit={submitHandler} className="loginPanel">
                     <p className="label">User</p>
-                    <input type="text" name="text" id="text" className="loginInput" value={user} onChange={onChangeUser}/>
+                    <input type="text" name="text" id="text" className="loginInput" value={userInfo.user} onChange={e => setUserInfo({...userInfo, user: e.target.value})}/>
                     <p className="label">Password</p>
-                    <input type="password" name="password" id="password" className="loginInput" value={password} onChange={onChangePassword}/>
-                    <input type="submit" name="login" id="login" className="loginButton" value="Login" onClick={login}/>
+                    <input type="password" name="password" id="password" className="loginInput" value={userInfo.password} onChange={e => setUserInfo({...userInfo, password: e.target.value})}/>
+                    <input type="submit" name="login" id="login" className="loginButton" value="Login"/>
                     <div className="d-flex flex-row align-items-center">
-                        <span className="error">{errorMsg}</span>
+                        <span className="error">{error}</span>
                         <span className="hint" onClick={hint}>Hint</span>
                     </div>
-                </div>
-            </div>
-            {
-                modalState ? (
-                    <div className="d-flex justify-content-evenly align-items-center modal">
-                        <div  className="modalBody">
-                            <div className="text-end">
-                                <button className="btn-close" onClick={hint}></button>
+                </form>
+                {
+                    modalState ? (
+                        <div className="d-flex justify-content-evenly align-items-center modal">
+                            <div  className="modalBody">
+                                <div className="text-end">
+                                    <button className="btn-close" onClick={hint}></button>
+                                </div>
+                                <h1 className="modalTitle">Hint</h1>
+                                <p className="modalDescription">I'll give the user credentials just because you looks like a good person</p>
+                                <p className="label">User</p>
+                                <p>thebest</p>
+                                <p className="label">password</p>
+                                <p>teacher</p>
+                                <p className="please">Please, don't tell anyone about this credentials xD</p>
                             </div>
-                            <h1 className="modalTitle">Hint</h1>
-                            <p className="modalDescription">I'll give the user credentials just because you looks like a good person</p>
-                            <p className="label">User</p>
-                            <p>thebest</p>
-                            <p className="label">password</p>
-                            <p>teacher</p>
-                            <p className="please">Please, don't tell anyone about this credentials xD</p>
                         </div>
-                    </div>
-                ) : (
-                    <div style={{display: 'none'}}/>
-                )
-            }
-            
+                    ) : (
+                        <div style={{display: 'none'}}/>
+                    )
+                }
+            </div>
         </div>
-        );
-};
+    )
+}
 
-export default Login;
+export default Login

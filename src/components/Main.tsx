@@ -4,7 +4,6 @@ import {
   Route,
 } from "react-router-dom";
 import WelcomePage from './Welcome';
-import Menu from './Menu';
 import Login from './Login';
 import Dashboard from './Dashboard';
 
@@ -13,8 +12,8 @@ const Main = () => {
         <Router>
             <Routes>
                 <Route path="/" element={<><WelcomePage/></>} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/dashboard" element={<><Menu/><Dashboard/></>} />
+                <Route path="/login" element={<Login/>} />
+                <Route path="/dashboard" element={<><Dashboard/></>} />
             </Routes>
         </Router>
     );
