@@ -103,6 +103,36 @@ a.link:hover, .link:hover {
   flex-direction: column;
 }
 
+.button {
+  text-transform: uppercase;
+  border-radius: 50px;
+  border: 2px solid var(--base-white);
+  padding: 0.5rem 2rem;
+  background: var(--base-white-light);
+  color: var(--base-black);
+  margin: auto;
+  letter-spacing: 0.1em;
+  transition: all .2s
+}
+.buttonn:hover {
+  background: var(--base-gray-lighter);
+}
+button:hover {
+  cursor: pointer
+}
+.hover-red:hover { 
+  background: var(--pastel-red);
+  color: var(--base-white);
+}
+
+.imagen {
+  max-height: 200px;
+  max-width: 250px;
+}
+
+.pointer {
+  cursor: pointer;
+}
 /* ---- LOGIN ---- */
 
 .loginPanel {

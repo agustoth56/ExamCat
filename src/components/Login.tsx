@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigate } from "react-router-dom";
 import { credentials } from '../data/credentials';
 
@@ -42,6 +42,9 @@ function Login() {
         modalState ? setModalState(false) : setModalState(true)
     }
     
+    useEffect(() => {
+        localStorage.setItem("userInfo", JSON.stringify({user: "", password: ""}));
+    });
     return (
         <div className="container">
             <nav className="text-end pt-3">
